@@ -23,7 +23,7 @@ ember install ember-flickity
 
 ## Flickity options
 
-All options from [flickity](http://flickity.metafizzy.co/options) are supported
+All options from [flickity](http://flickity.metafizzy.co/options.html) are supported
 
 ```handlebars
 {{#em-flickity pageDots=true draggable=true showSlides=(gt numItems 1)}}

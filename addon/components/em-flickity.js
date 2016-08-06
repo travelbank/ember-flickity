@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import layout from '../templates/components/em-flickity';
 
-const { $, get, getProperties, set } = Ember;
+const { $, computed, get, getProperties, set } = Ember;
 
 export default Ember.Component.extend({
   layout,
@@ -9,13 +9,45 @@ export default Ember.Component.extend({
   showSlides: false,
   widget: null,
 
-  // flickity settings
+  // some default flickity settings
   cellAlign: 'center',
   contain: true,
-  setGallerySize: false,
+  friction: 0.8,
   pageDots: false,
   selectedAttraction: 0.125,
-  friction: 0.8,
+  setGallerySize: false,
+
+  optionKeys: computed(function () {
+    return [
+      'accessibility',
+      'adaptiveHeight',
+      'arrowShape',
+      'asNavFor',
+      'autoPlay',
+      'bgLazyLoad',
+      'draggable',
+      'gragThreshold',
+      'cellAlign',
+      'cellSelector',
+      'contain',
+      'freeScroll',
+      'freeScrollFriction',
+      'friction',
+      'groupCells',
+      'imagesLoaded',
+      'initialIndex',
+      'lazyLoad',
+      'pageDots',
+      'percentPosition',
+      'prevNextButtons',
+      'resize',
+      'rightToLeft',
+      'selectedAttraction',
+      'setGallerySize',
+      'watchCSS',
+      'wrapAround'
+    ];
+  }),
 
   didInsertElement() {
     if (get(this, 'showSlides')) {
@@ -30,14 +62,15 @@ export default Ember.Component.extend({
   },
 
   _getOptions() {
-    const props = [
-      'contain',
-      'setGallerySize',
-      'pageDots',
-      'selectedAttraction',
-      'friction'
-    ];
+    const propKeys = get(this, 'optionKeys');
+    const props = getProperties(this, ...propKeys);
 
-    return getProperties(this, ...props);
+    Object.keys(props).forEach(prop => {
+      if (!props[prop] && typeof props[prop] !== 'boolean') {
+        delete props[prop];
+      }
+    });
+
+    return props;
   }
 });

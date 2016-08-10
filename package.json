@@ -1,7 +1,7 @@
 {
   "name": "ember-flickity",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.1",
+  "description": "An ember addon for flickity.",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -11,11 +11,14 @@
     "start": "ember server",
     "test": "ember try:each"
   },
-  "repository": "",
+  "repository": "travelbank/flickity",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 5.x"
   },
-  "author": "",
+  "author": "Dylan Foster <dylan947@gmail.com>",
+  "contributors": [
+    { "name": "Dylan Foster", "email": "dylan947@gmail" }
+  ],
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.2",

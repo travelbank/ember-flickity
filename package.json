@@ -11,7 +11,8 @@
     "start": "ember server",
     "test": "ember try:each"
   },
-  "repository": "travelbank/flickity",
+  "repository": "travelbank/ember-flickity",
+  "bugs": "travelbank/ember-flicky/issues",
   "engines": {
     "node": ">= 5.x"
   },

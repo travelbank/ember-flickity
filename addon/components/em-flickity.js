@@ -49,9 +49,28 @@ export default Ember.Component.extend({
     ];
   }),
 
+  eventKeys: computed(function getEventKeys() {
+    return [
+      "cellSelect",
+      "select",
+      "settle",
+      "scroll",
+      "dragStart",
+      "dragMove",
+      "dragEnd",
+      "pointerDown",
+      "pointerMove",
+      "pointerUp",
+      "staticClick",
+      "lazyLoad",
+      "bgLazyLoad"
+    ];
+  }),
+
   didInsertElement() {
     if (get(this, "showSlides")) {
       set(this, "widget", this.$().flickity(this._getOptions()));
+      this._setupEvents();
     }
   },
 
@@ -59,6 +78,21 @@ export default Ember.Component.extend({
     if (get(this, "widget")) {
       get(this, "widget").flickity("destroy");
     }
+  },
+
+  _setupEvents() {
+    const $widget = get(this, "widget");
+
+    get(this, "eventKeys").forEach(key => {
+      $widget.on(`${key}.flickity`, (event, pointer, cellElement, cellIndex) => {
+        if (this.attrs[key]) {
+          this.attrs[key](
+            cellIndex || $widget.data("flickity").selectedIndex,
+            $widget.data("flickity")
+          );
+        }
+      });
+    });
   },
 
   _getOptions() {

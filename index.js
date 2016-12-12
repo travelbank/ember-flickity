@@ -5,11 +5,15 @@ const path = require("path");
 
 module.exports = {
   name: "ember-flickity",
+
   blueprintsPath() {
-    return __dirname + "/blueprints";
+    return path.join(__dirname, "blueprints");
   },
+
   included(app) {
-    this._super.included.apply(this, arguments);
+    this._super(app);
+
+    if (process.env.EMBER_CLI_FASTBOOT) { return; }
 
     const flickityPath = path.join(app.bowerDirectory, "flickity/dist");
 
@@ -19,6 +23,7 @@ module.exports = {
       app.import(path.join(flickityPath, "flickity.pkgd.js"));
     }
   },
+
   isDevelopingAddon() {
     return true;
   }

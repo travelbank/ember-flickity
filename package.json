@@ -1,6 +1,6 @@
 {
   "name": "ember-flickity",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "An ember addon for flickity.",
   "directories": {
     "doc": "doc",
@@ -12,7 +12,7 @@
     "test": "ember try:each"
   },
   "repository": "travelbank/ember-flickity",
-  "bugs": "travelbank/ember-flicky/issues",
+  "bugs": "travelbank/ember-flickity/issues",
   "engines": {
     "node": ">= 5.x"
   },
@@ -21,6 +21,10 @@
     {
       "name": "Dylan Foster",
       "email": "dylan947@gmail.com"
+    },
+    {
+      "name": "Brian Gonzalez",
+      "email": "brian@dollarshaveclub.com"
     }
   ],
   "license": "MIT",

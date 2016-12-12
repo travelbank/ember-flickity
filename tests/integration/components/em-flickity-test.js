@@ -44,4 +44,40 @@ describeComponent("em-flickity", "Integration: EmFlickityComponent", {
 
     expect(this.$(PAGE_DOTS)).to.have.length(1);
   });
+
+  [
+    "cellSelect",
+    "select",
+    "settle",
+    "scroll",
+    "dragStart",
+    "dragMove",
+    "dragEnd",
+    "pointerDown",
+    "pointerMove",
+    "pointerUp",
+    "staticClick",
+    "lazyLoad",
+    "bgLazyLoad"
+  ].forEach(event => {
+    it(`binds to the ${event} flickity event`, function () {
+      let eventCalled;
+      this.set("handler", () => { eventCalled = true; });
+      this.render(hbs`
+          {{#em-flickity showSlides=true cellSelect=(action handler) select=(action handler)
+                        settle=(action handler) scroll=(action handler)
+                        dragStart=(action handler) dragMove=(action handler)
+                        dragEnd=(action handler) pointerDown=(action handler)
+                        pointerMove=(action handler) pointerUp=(action handler)
+                        staticClick=(action handler) lazyLoad=(action handler)
+                        bgLazyLoad=(action handler) }}
+            <div id="slide-1"></div>
+            <div id="slide-2"></div>
+          {{/em-flickity}}
+          `);
+
+      this.$(".flickity-wrapper").trigger(`${event}.flickity`);
+      expect(eventCalled).to.be.true;
+    });
+  });
 });

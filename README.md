@@ -18,15 +18,18 @@ ember install ember-flickity
 {{/em-flickity}}
 ```
 
-`showSlides` is a Boolean. This allows you to enable or disable flickity based on the number of items you have in the list
+`showSlides` is a Boolean. This allows you to enable or disable flickity based on the
+number of items you have in the list.
 
+## Flickity options and events
 
-## Flickity options
+All [options][flickityOptions] and [events][flickityEvents] are supported.
 
-All options from [flickity](http://flickity.metafizzy.co/options.html) are supported
+[flickityEvents]: http://flickity.metafizzy.co/events.html#flickity-events
+[flickityOptions]: http://flickity.metafizzy.co/options.html
 
 ```handlebars
-{{#em-flickity pageDots=true draggable=true showSlides=(gt numItems 1)}}
+{{#em-flickity pageDots=true draggable=true showSlides=(gt numItems 1) settle=(action 'mySettle')}}
 
 {{/em-flickity}}
 ```

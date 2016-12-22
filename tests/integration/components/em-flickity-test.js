@@ -62,6 +62,7 @@ describeComponent("em-flickity", "Integration: EmFlickityComponent", {
   ].forEach(event => {
     it(`binds to the ${event} flickity event`, function () {
       let eventCalled;
+
       this.set("handler", () => { eventCalled = true; });
       this.render(hbs`
           {{#em-flickity showSlides=true cellSelect=(action handler) select=(action handler)
@@ -77,7 +78,7 @@ describeComponent("em-flickity", "Integration: EmFlickityComponent", {
           `);
 
       this.$(".flickity-wrapper").trigger(`${event}.flickity`);
-      expect(eventCalled).to.be.true;
+      expect(eventCalled).to.equal(true);
     });
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "ember-flickity",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An ember addon for flickity.",
   "directories": {
     "doc": "doc",

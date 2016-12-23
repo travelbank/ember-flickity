@@ -1,6 +1,6 @@
 {
   "name": "ember-flickity",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An ember addon for flickity.",
   "directories": {
     "doc": "doc",
@@ -33,12 +33,13 @@
     "ember-ajax": "^2.0.1",
     "ember-cli": "2.6.2",
     "ember-cli-app-version": "^1.0.0",
+    "ember-cli-chai": "0.3.2",
     "ember-cli-dependency-checker": "^1.2.0",
     "ember-cli-eslint": "1.7.0",
     "ember-cli-htmlbars": "^1.0.3",
     "ember-cli-htmlbars-inline-precompile": "^0.3.1",
     "ember-cli-inject-live-reload": "^1.4.0",
-    "ember-cli-mocha": "0.10.4",
+    "ember-cli-mocha": "0.13.1",
     "ember-cli-release": "^0.2.9",
     "ember-cli-sri": "^2.1.0",
     "ember-cli-uglify": "^1.2.0",

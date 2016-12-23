@@ -6,6 +6,7 @@ const { computed, get, getProperties, set } = Ember;
 export default Ember.Component.extend({
   layout,
   classNames: ["flickity-wrapper"],
+  eventHandlers: [],
   showSlides: false,
   widget: null,
 
@@ -75,24 +76,30 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
-    if (get(this, "widget")) {
-      get(this, "widget").flickity("destroy");
+    const $widget = get(this, "widget");
+
+    if ($widget) {
+      get(this, "eventHandlers").forEach(evt => evt.off());
+      $widget.flickity("destroy");
     }
   },
 
   _setupEvents() {
     const $widget = get(this, "widget");
 
-    get(this, "eventKeys").forEach(key => {
-      $widget.on(`${key}.flickity`, (event, pointer, cellElement, cellIndex) => {
-        if (this.attrs[key]) {
-          this.attrs[key](
-            cellIndex || $widget.data("flickity").selectedIndex,
-            $widget.data("flickity")
-          );
-        }
-      });
-    });
+    const handler = key => (event, pointer, cellElement, cellIndex) => {
+      if (this.attrs[key]) {
+        this.attrs[key](
+          cellIndex || $widget.data("flickity").selectedIndex,
+          $widget.data("flickity")
+        );
+      }
+    };
+
+    const eventHandlers = get(this, "eventKeys")
+      .map(key => $widget.on(`${key}.flickity`, handler(key)));
+
+    set(this, "eventHandlers", eventHandlers);
   },
 
   _getOptions() {

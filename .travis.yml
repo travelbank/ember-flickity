@@ -41,7 +41,4 @@ install:
 script:
   # Usually, it's ok to finish the test scenario without reverting
   #  to the addon's original dependency state, skipping "cleanup".
-  - COVERAGE=true ember try $EMBER_TRY_SCENARIO test --skip-cleanup
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - ember try $EMBER_TRY_SCENARIO test --skip-cleanup

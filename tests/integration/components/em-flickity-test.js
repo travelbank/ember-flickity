@@ -1,16 +1,18 @@
 /* jshint expr:true */
 import { expect } from "chai";
-import { describeComponent, it } from "ember-mocha";
-import { describe } from "mocha";
+import { setupComponentTest } from "ember-mocha";
+import { describe, it } from "mocha";
 import hbs from "htmlbars-inline-precompile";
 
 const NEXT_BUTTON = ".flickity-prev-next-button.next";
 const PREV_BUTTON = ".flickity-prev-next-button.previous";
 const PAGE_DOTS = ".flickity-page-dots";
 
-describeComponent("em-flickity", "Integration: EmFlickityComponent", {
-  integration: true
-}, function () {
+describe("Integration: EmFlickityComponent", function () {
+  setupComponentTest("em-flickity", {
+    integration: true
+  });
+
   it("renders", function () {
     this.render(hbs`{{em-flickity}}`);
     expect(this.$()).to.have.length(1);

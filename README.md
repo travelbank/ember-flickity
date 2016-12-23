@@ -1,5 +1,7 @@
 # Ember-flickity
 
+[![Build Status](https://travis-ci.org/travelbank/ember-flickity.svg?branch=develop)](https://travis-ci.org/travelbank/ember-flickity)
+
 An Ember addon for [flickity](http://flickity.metafizzy.co/)
 
 ## Installation

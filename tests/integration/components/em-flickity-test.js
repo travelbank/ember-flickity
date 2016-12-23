@@ -84,3 +84,23 @@ describe("Integration: EmFlickityComponent", function () {
     });
   });
 });
+
+describe("when EmFlickityComponent is nested in another component", function () {
+  setupComponentTest("nested-em-flickity", {
+    integration: true
+  });
+
+  it("renders", function () {
+    this.set("options", [1, 2, 3, 4, 5]);
+
+    this.render(hbs`
+      {{nested-em-flickity options=options currentIndex=0}}
+      {{nested-em-flickity options=options currentIndex=1}}
+      {{nested-em-flickity options=options currentIndex=2}}
+      {{nested-em-flickity options=options currentIndex=3}}
+      {{nested-em-flickity options=options currentIndex=4}}
+    `);
+
+    expect(this.$(".item")).to.have.length(25);
+  });
+});

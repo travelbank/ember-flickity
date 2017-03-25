@@ -1,3 +1,8 @@
+<a name="0.1.3"></a>
+## [0.1.3](https://github.com/travelbank/ember-flickity/compare/0.1.2...v0.1.3) (2017-03-25)
+
+
+
 <a name="0.1.2"></a>
 ## [0.1.2](https://github.com/travelbank/ember-flickity/compare/0.1.1...v0.1.2) (2016-12-23)
 

@@ -14,7 +14,7 @@
   "repository": "travelbank/ember-flickity",
   "bugs": "travelbank/ember-flickity/issues",
   "engines": {
-    "node": ">= 5.x"
+    "node": ">= 6.11"
   },
   "author": "Dylan Foster <dylan947@gmail.com>",
   "contributors": [

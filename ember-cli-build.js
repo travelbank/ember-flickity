@@ -1,10 +1,21 @@
-/*jshint node:true*/
+/* jshint node:true*/
 /* global require, module */
-var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
+const EmberAddon = require("ember-cli/lib/broccoli/ember-addon");
+const fastbootTransform = require("fastboot-transform");
 
-module.exports = function(defaults) {
-  var app = new EmberAddon(defaults, {
-    // Add options here
+module.exports = function exports(defaults) {
+  const app = new EmberAddon(defaults, {
+    nodeAssets: {
+      flickity: {
+        import: {
+          srcDir: "dist",
+          include: ["flickity.pkgd.js"],
+          processTree(input) {
+            return fastbootTransform(input);
+          }
+        }
+      }
+    }
   });
 
   return app.toTree();

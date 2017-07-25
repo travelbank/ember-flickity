@@ -1,3 +1,12 @@
+<a name="0.1.5"></a>
+## [0.1.5](https://github.com/travelbank/ember-flickity/compare/0.1.4...v0.1.5) (2017-07-25)
+
+
+### Bug Fixes
+
+* **index:** update ember-cli-node-assets usage ([9832d50](https://github.com/travelbank/ember-flickity/commit/9832d50))
+
+
 <a name="0.1.4"></a>
 ## [0.1.4](https://github.com/travelbank/ember-flickity/compare/0.1.5...v0.1.4) (2017-07-24)
 

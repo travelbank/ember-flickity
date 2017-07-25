@@ -11,15 +11,22 @@ module.exports = {
     return path.join(__dirname, "blueprints");
   },
 
-  nodeAssets: {
-    flickity: {
-      vendor: {
-        include: ["dist/flickity.pkgd.js"],
-        processTree(input) {
-          return fastbootTransform(input);
+  options: {
+    nodeAssets: {
+      flickity: {
+        vendor: {
+          include: ["dist/flickity.pkgd.js"],
+          processTree(input) {
+            return fastbootTransform(input);
+          }
         }
       }
     }
+  },
+
+  included() {
+    this._super.included.apply(this, arguments);
+    this.import("vendor/flickity/dist/flickity.pkgd.js");
   },
 
   isDevelopingAddon() {

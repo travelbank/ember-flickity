@@ -56,7 +56,7 @@ All [options][flickityOptions] and [events][flickityEvents] are supported.
   }),
 ```
 ```handlebars
-{{#em-flickity pageDots=true draggable=true events=events)}}
+{{#em-flickity pageDots=true draggable=true events=events}}
 
 {{/em-flickity}}
 ```

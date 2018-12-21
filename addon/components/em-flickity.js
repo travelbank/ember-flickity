@@ -18,6 +18,12 @@ export default Ember.Component.extend({
   selectedAttraction: 0.125,
   setGallerySize: false,
 
+  // these are for events that happen on create, if not they don't happen
+  delayTime: 200,
+  delayedEvents: computed(function getDelayedEvents() {
+    return ["ready"];
+  }),
+
   optionKeys: computed(function getOptionKeys() {
     return [
       "accessibility",
@@ -46,7 +52,8 @@ export default Ember.Component.extend({
       "selectedAttraction",
       "setGallerySize",
       "watchCSS",
-      "wrapAround"
+      "wrapAround",
+      "events"
     ];
   }),
 
@@ -87,10 +94,27 @@ export default Ember.Component.extend({
 
   _setupEvents() {
     const eventHandlers = {};
+    let events = this.attrs;
+    let eventsList = get(this, "eventKeys");
 
-    get(this, "eventKeys").forEach(key => {
-      if (this.attrs[key]) {
-        eventHandlers[key] = this.attrs[key];
+    if (this.attrs["events"]) {
+      events = get(this, "events");
+      eventsList = Object.keys(events);
+    }
+
+    eventsList.forEach(key => {
+      if (events[key]) {
+        const isDelayed = get(this, "delayedEvents").includes(key);
+        const delayTime = isDelayed ? get(this, "delayTime") : 1;
+
+        eventHandlers[key] = (event, pointer, cellElement, cellIndex) => {
+          setTimeout(() => {
+            const $widget = get(this, "widget");
+
+            events[key](cellIndex || $widget.data("flickity").selectedIndex,
+              $widget.data("flickity"));
+          }, delayTime);
+        };
       }
     });
 
@@ -107,7 +131,11 @@ export default Ember.Component.extend({
       }
     });
 
-    props.on = this._setupEvents();
+    const events = this._setupEvents();
+
+    if (Object.keys(events) > 0) {
+      props.on = events;
+    }
 
     return props;
   }

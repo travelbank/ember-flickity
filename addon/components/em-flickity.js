@@ -64,7 +64,8 @@ export default Ember.Component.extend({
       "pointerUp",
       "staticClick",
       "lazyLoad",
-      "bgLazyLoad"
+      "bgLazyLoad",
+      "ready"
     ];
   }),
 

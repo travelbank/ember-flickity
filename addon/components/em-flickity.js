@@ -65,14 +65,14 @@ export default Ember.Component.extend({
       "staticClick",
       "lazyLoad",
       "bgLazyLoad",
-      "ready"
+      "ready",
+      "change"
     ];
   }),
 
   didInsertElement() {
     if (get(this, "showSlides")) {
       set(this, "widget", this.$().flickity(this._getOptions()));
-      this._setupEvents();
     }
   },
 
@@ -80,27 +80,21 @@ export default Ember.Component.extend({
     const $widget = get(this, "widget");
 
     if ($widget) {
-      get(this, "eventHandlers").forEach(evt => evt.off());
+      get(this, "eventKeys").forEach(evt => evt.off());
       $widget.flickity("destroy");
     }
   },
 
   _setupEvents() {
-    const $widget = get(this, "widget");
+    const eventHandlers = {};
 
-    const handler = key => (event, pointer, cellElement, cellIndex) => {
+    get(this, "eventKeys").forEach(key => {
       if (this.attrs[key]) {
-        this.attrs[key](
-          cellIndex || $widget.data("flickity").selectedIndex,
-          $widget.data("flickity")
-        );
+        eventHandlers[key] = this.attrs[key];
       }
-    };
+    });
 
-    const eventHandlers = get(this, "eventKeys")
-      .map(key => $widget.on(`${key}.flickity`, handler(key)));
-
-    set(this, "eventHandlers", eventHandlers);
+    return eventHandlers;
   },
 
   _getOptions() {
@@ -112,6 +106,8 @@ export default Ember.Component.extend({
         delete props[prop];
       }
     });
+
+    props.on = this._setupEvents();
 
     return props;
   }

@@ -88,7 +88,7 @@ export default Ember.Component.extend({
     const $widget = get(this, "_widget");
 
     if ($widget) {
-      get(this, "eventKeys").forEach(evt => evt.off());
+      get(this, "eventKeys").forEach(evt => $widget.off(evt));
       $widget.flickity("destroy");
     }
   },

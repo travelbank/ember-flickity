@@ -6,9 +6,9 @@ const { computed, get, getProperties, set } = Ember;
 export default Ember.Component.extend({
   layout,
   classNames: ["flickity-wrapper"],
-  eventHandlers: [],
+  _widget: null,
   showSlides: false,
-  widget: null,
+  events: null,
 
   // some default flickity settings
   cellAlign: "center",
@@ -26,40 +26,42 @@ export default Ember.Component.extend({
 
   optionKeys: computed(function getOptionKeys() {
     return [
-      "accessibility",
-      "adaptiveHeight",
-      "arrowShape",
-      "asNavFor",
-      "autoPlay",
-      "bgLazyLoad",
       "draggable",
-      "gragThreshold",
-      "cellAlign",
-      "cellSelector",
-      "contain",
       "freeScroll",
-      "freeScrollFriction",
-      "friction",
-      "groupCells",
-      "imagesLoaded",
-      "initialIndex",
-      "lazyLoad",
-      "pageDots",
-      "percentPosition",
-      "prevNextButtons",
-      "resize",
-      "rightToLeft",
-      "selectedAttraction",
-      "setGallerySize",
-      "watchCSS",
       "wrapAround",
-      "events"
+      "groupCells",
+      "autoPlay",
+      "fullscreen",
+      "adaptiveHeight",
+      "watchCSS",
+      "asNavFor",
+      "hash",
+      "dragThreshold",
+      "selectedAttraction",
+      "friction",
+      "freeScrollFriction",
+      "imagesLoaded",
+      "lazyLoad",
+      "bgLazyLoad",
+      "cellSelector",
+      "initialIndex",
+      "accessibility",
+      "setGallerySize",
+      "resize",
+      "cellAlign",
+      "contain",
+      "percentPosition",
+      "rightToLeft",
+      "prevNextButtons",
+      "pageDots",
+      "arrowShape"
     ];
   }),
 
   eventKeys: computed(function getEventKeys() {
     return [
-      "cellSelect",
+      "ready",
+      "change",
       "select",
       "settle",
       "scroll",
@@ -72,19 +74,18 @@ export default Ember.Component.extend({
       "staticClick",
       "lazyLoad",
       "bgLazyLoad",
-      "ready",
-      "change"
+      "fullscreenChange"
     ];
   }),
 
   didInsertElement() {
     if (get(this, "showSlides")) {
-      set(this, "widget", this.$().flickity(this._getOptions()));
+      set(this, "_widget", this.$().flickity(this._getOptions()));
     }
   },
 
   willDestroyElement() {
-    const $widget = get(this, "widget");
+    const $widget = get(this, "_widget");
 
     if ($widget) {
       get(this, "eventKeys").forEach(evt => evt.off());
@@ -94,12 +95,13 @@ export default Ember.Component.extend({
 
   _setupEvents() {
     const eventHandlers = {};
-    let events = this.attrs;
+    let events = get(this, "events");
     let eventsList = get(this, "eventKeys");
 
-    if (this.attrs["events"]) {
-      events = get(this, "events");
+    if (events) {
       eventsList = Object.keys(events);
+    } else {
+      events = this.attrs;
     }
 
     eventsList.forEach(key => {
@@ -109,7 +111,7 @@ export default Ember.Component.extend({
 
         eventHandlers[key] = (event, pointer, cellElement, cellIndex) => {
           setTimeout(() => {
-            const $widget = get(this, "widget");
+            const $widget = get(this, "_widget");
 
             events[key](cellIndex || $widget.data("flickity").selectedIndex,
               $widget.data("flickity"));
@@ -131,9 +133,9 @@ export default Ember.Component.extend({
       }
     });
 
-    const events = this._setupEvents();
+    const events = this._setupEvents() || {};
 
-    if (Object.keys(events) > 0) {
+    if (Object.keys(events).length > 0) {
       props.on = events;
     }
 

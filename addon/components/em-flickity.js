@@ -78,9 +78,12 @@ export default Ember.Component.extend({
     ];
   }),
 
-  didInsertElement() {
+  didInsertElement(...args) {
+    this._super(...args);
     if (get(this, "showSlides")) {
-      set(this, "_widget", this.$().flickity(this._getOptions()));
+      setTimeout(() => {
+        set(this, "_widget", this.$().flickity(this._getOptions()));
+      }, 0);
     }
   },
 
@@ -107,7 +110,7 @@ export default Ember.Component.extend({
     eventsList.forEach(key => {
       if (events[key]) {
         const isDelayed = get(this, "delayedEvents").includes(key);
-        const delayTime = isDelayed ? get(this, "delayTime") : 1;
+        const delayTime = isDelayed ? get(this, "delayTime") : 0;
 
         eventHandlers[key] = (event, pointer, cellElement, cellIndex) => {
           setTimeout(() => {

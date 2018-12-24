@@ -1,14 +1,14 @@
-import Ember from "ember";
-import layout from "../templates/components/em-flickity";
+import Component from '@ember/component';
+import { computed, get, set, getProperties } from '@ember/object';
+import { run } from '@ember/runloop';
+import layout from '../templates/components/em-flickity';
 
-const { computed, get, getProperties, set } = Ember;
-
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
   classNames: ["flickity-wrapper"],
-  eventHandlers: [],
+  _widget: null,
   showSlides: false,
-  widget: null,
+  events: null,
 
   // some default flickity settings
   cellAlign: "center",
@@ -20,39 +20,42 @@ export default Ember.Component.extend({
 
   optionKeys: computed(function getOptionKeys() {
     return [
-      "accessibility",
-      "adaptiveHeight",
-      "arrowShape",
-      "asNavFor",
-      "autoPlay",
-      "bgLazyLoad",
       "draggable",
-      "gragThreshold",
-      "cellAlign",
-      "cellSelector",
-      "contain",
       "freeScroll",
-      "freeScrollFriction",
-      "friction",
+      "wrapAround",
       "groupCells",
-      "imagesLoaded",
-      "initialIndex",
-      "lazyLoad",
-      "pageDots",
-      "percentPosition",
-      "prevNextButtons",
-      "resize",
-      "rightToLeft",
-      "selectedAttraction",
-      "setGallerySize",
+      "autoPlay",
+      "fullscreen",
+      "adaptiveHeight",
       "watchCSS",
-      "wrapAround"
+      "asNavFor",
+      "hash",
+      "dragThreshold",
+      "selectedAttraction",
+      "friction",
+      "freeScrollFriction",
+      "imagesLoaded",
+      "lazyLoad",
+      "bgLazyLoad",
+      "cellSelector",
+      "initialIndex",
+      "accessibility",
+      "setGallerySize",
+      "resize",
+      "cellAlign",
+      "contain",
+      "percentPosition",
+      "rightToLeft",
+      "prevNextButtons",
+      "pageDots",
+      "arrowShape"
     ];
   }),
 
   eventKeys: computed(function getEventKeys() {
     return [
-      "cellSelect",
+      "ready",
+      "change",
       "select",
       "settle",
       "scroll",
@@ -64,42 +67,53 @@ export default Ember.Component.extend({
       "pointerUp",
       "staticClick",
       "lazyLoad",
-      "bgLazyLoad"
+      "bgLazyLoad",
+      "fullscreenChange"
     ];
   }),
 
-  didInsertElement() {
-    if (get(this, "showSlides")) {
-      set(this, "widget", this.$().flickity(this._getOptions()));
-      this._setupEvents();
-    }
+  didInsertElement(...args) {
+    this._super(...args);
+    run.later(() => {
+      if (get(this, "showSlides")) {
+        set(this, "_widget", this.$().flickity(this._getOptions()));
+      }
+    }, 0);
   },
 
   willDestroyElement() {
-    const $widget = get(this, "widget");
+    const $widget = get(this, "_widget");
 
     if ($widget) {
-      get(this, "eventHandlers").forEach(evt => evt.off());
+      get(this, "eventKeys").forEach(evt => $widget.off(evt));
       $widget.flickity("destroy");
     }
   },
 
   _setupEvents() {
-    const $widget = get(this, "widget");
+    const eventHandlers = {};
+    let events = get(this, "events");
+    let eventsList = get(this, "eventKeys");
+    let eventsFromParameters = true;
 
-    const handler = key => (event, pointer, cellElement, cellIndex) => {
-      if (this.attrs[key]) {
-        this.attrs[key](
-          cellIndex || $widget.data("flickity").selectedIndex,
-          $widget.data("flickity")
-        );
+    if (events) {
+      eventsList = Object.keys(events);
+      eventsFromParameters = false;
+    }
+
+    eventsList.forEach(key => {
+      const eventFunc = eventsFromParameters ? get(this, key): events[key];
+      if (eventFunc) {
+        eventHandlers[key] = (...args) => {
+          run.later(() => {
+            const $widget = get(this, "_widget").data("flickity");
+            eventFunc(...args, $widget);
+          },0);
+        };
       }
-    };
+    });
 
-    const eventHandlers = get(this, "eventKeys")
-      .map(key => $widget.on(`${key}.flickity`, handler(key)));
-
-    set(this, "eventHandlers", eventHandlers);
+    return eventHandlers;
   },
 
   _getOptions() {
@@ -111,6 +125,12 @@ export default Ember.Component.extend({
         delete props[prop];
       }
     });
+
+    const events = this._setupEvents() || {};
+    //console.log(events);
+    if (Object.keys(events).length > 0) {
+      props.on = events;
+    }
 
     return props;
   }

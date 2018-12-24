@@ -1,40 +1,47 @@
+---
 language: node_js
 node_js:
-- node
-- '5'
-- '6'
+  # we recommend testing addons with the same minimum supported node version as Ember CLI
+  # so that your addon works for all apps
+  - "6"
+
 sudo: false
-branches:
-  only:
-  - master
-  - develop
+dist: trusty
+
+addons:
+  chrome: stable
+
 cache:
   directories:
-  - node_modules
+    - $HOME/.npm
+
 env:
-- EMBER_TRY_SCENARIO=default
-- EMBER_TRY_SCENARIO=ember-1.13
-- EMBER_TRY_SCENARIO=ember-release
-- EMBER_TRY_SCENARIO=ember-beta
-- EMBER_TRY_SCENARIO=ember-canary
+  global:
+    # See https://git.io/vdao3 for details.
+    - JOBS=1
+  matrix:
+    # we recommend new addons test the current and previous LTS
+    # as well as latest stable release (bonus points to beta/canary)
+    - EMBER_TRY_SCENARIO=ember-lts-2.12
+    - EMBER_TRY_SCENARIO=ember-lts-2.16
+    - EMBER_TRY_SCENARIO=ember-lts-2.18
+    - EMBER_TRY_SCENARIO=ember-release
+    - EMBER_TRY_SCENARIO=ember-beta
+    - EMBER_TRY_SCENARIO=ember-canary
+    - EMBER_TRY_SCENARIO=ember-default
+
 matrix:
   fast_finish: true
   allow_failures:
-  - env: EMBER_TRY_SCENARIO=ember-canary
+    - env: EMBER_TRY_SCENARIO=ember-canary
+
 before_install:
-- npm config set spin false
-- npm install -g bower
-- npm install phantomjs-prebuilt
-install:
-- npm install
-- bower install
+  - npm config set spin false
+  - npm install -g npm@4
+  - npm --version
+
 script:
-- ember try $EMBER_TRY_SCENARIO test --skip-cleanup
-deploy:
-  provider: npm
-  email: dylan947@gmail.com
-  api_key:
-    secure: OywUi0VE106RA+nj0tht4EIu9V6vRySXKd5ieLhtg+F4vV1ZfT9VkAYUKA6+g9By6EuYJjzQKL0s+2j0vfDeSCw9O9pkjm98g47KrYdqf6kuJXWPH6fvracgqTDo/1TXrZTUHJDbbmWpaaK2BTQPZX0tydp5Dm0FNrUiYNoWUHbvY2DsxFtOEORas6ZVxJnS1SndWXPJOAyB1d3/td2cnerAdjOiAAnObCCupyLoy0uVCAEJdj9ykH/eFcxrK6SlIklc3bkY/MkbflpXCsDIgPHJidFwQNKEJxwGAVHgzo3FpsZlP7JIK4HESBRgcCcOwQEZlZacsWLAQyfW+1L7LWr7pfB4TlRfT4dayXow8321x1TbdTbUw8fyrb8QVA4Nkyrv3kUNJs42ZhKEYb0sY3tEa16mHo7Rm5XbrC9/x5bSccj/QURCEmI8juVp+Sku703ITNpgs1MbKPvip9llSGixbJJphirql0+6vbSEtms9No/9aIq//FT2oWLDURc45BG3HcCS8IKEitOz8gZgAhSYqNPPBondTOhHLE9MG0ySK41nPiGCie9LGk0Xshj/GQYO5uw7J+puCJwKRN9Ar5884VKW0N6Y06IiJfiUO5GTg+hL7rnKMaw9ElvQ3Kni/O9qZmFyhkOIkPfr9TNfYkN05qp/16BEmpD1QI/ZWgw=
-  on:
-    tags: true
-    repo: travelbank/ember-flickity
+  - npm run lint:js
+  # Usually, it's ok to finish the test scenario without reverting
+  #  to the addon's original dependency state, skipping "cleanup".
+  - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO --skip-cleanup

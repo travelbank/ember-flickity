@@ -1,50 +1,62 @@
-ember-flickity
-==============================================================================
+# Ember-flickity
 
-[Short description of the addon.]
+[![Build Status](https://travis-ci.org/travelbank/ember-flickity.svg?branch=develop)](https://travis-ci.org/travelbank/ember-flickity)
 
-Installation
-------------------------------------------------------------------------------
+An Ember addon for [flickity](http://flickity.metafizzy.co/)
+
+## Installation
 
 ```
 ember install ember-flickity
 ```
 
+## Usage
 
-Usage
-------------------------------------------------------------------------------
+```handlebars
+{{#em-flickity class="my-slideshow" showSlides=(gt items.length 1)}}
+  {{#each items as |item|}}
+    <div class="my-slideshow__item"></div>
+  {{/each}}
+{{/em-flickity}}
+```
 
-[Longer description of how to use the addon in apps.]
+`showSlides` is a Boolean. This allows you to enable or disable flickity based on the
+number of items you have in the list.
 
+## Flickity options and events
 
-Contributing
-------------------------------------------------------------------------------
+All [options][flickityOptions] and [events][flickityEvents] are supported.
 
-### Installation
+[flickityEvents]: http://flickity.metafizzy.co/events.html#flickity-events
+[flickityOptions]: http://flickity.metafizzy.co/options.html
 
-* `git clone <repository-url>`
-* `cd ember-flickity`
-* `npm install`
+```javascript
+    actions:{
+      mySettle(index, flickityElement) => {
+        console.log('settle');
+      },
+    }
+```
+```handlebars
+{{#em-flickity pageDots=true draggable=true showSlides=(gt numItems 1) settle=(action 'mySettle')}}
 
-### Linting
+{{/em-flickity}}
+```
+```javascript
+  events: computed(() => {
+    return {
+      ready: (index, flickityElement) => {
+        console.log('ready');
+        flickityElement.resize();
+      },
+      change: (index, flickityElement) => {
+        console.log('change');
+      },
+    };
+  }),
+```
+```handlebars
+{{#em-flickity pageDots=true draggable=true events=events}}
 
-* `npm run lint:js`
-* `npm run lint:js -- --fix`
-
-### Running tests
-
-* `ember test` – Runs the test suite on the current Ember version
-* `ember test --server` – Runs the test suite in "watch mode"
-* `ember try:each` – Runs the test suite against multiple Ember versions
-
-### Running the dummy application
-
-* `ember serve`
-* Visit the dummy application at [http://localhost:4200](http://localhost:4200).
-
-For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
-
-License
-------------------------------------------------------------------------------
-
-This project is licensed under the [MIT License](LICENSE.md).
+{{/em-flickity}}
+```

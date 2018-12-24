@@ -1,9 +1,9 @@
-import Ember from "ember";
-import layout from "../templates/components/em-flickity";
+import Component from '@ember/component';
+import { computed, get, set, getProperties } from '@ember/object';
+import { run } from '@ember/runloop';
+import layout from '../templates/components/em-flickity';
 
-const { computed, get, getProperties, set } = Ember;
-
-export default Ember.Component.extend({
+export default Component.extend({
   layout,
   classNames: ["flickity-wrapper"],
   _widget: null,
@@ -17,12 +17,6 @@ export default Ember.Component.extend({
   pageDots: false,
   selectedAttraction: 0.125,
   setGallerySize: false,
-
-  // these are for events that happen on create, if not they don't happen
-  delayTime: 200,
-  delayedEvents: computed(function getDelayedEvents() {
-    return ["ready"];
-  }),
 
   optionKeys: computed(function getOptionKeys() {
     return [
@@ -80,11 +74,11 @@ export default Ember.Component.extend({
 
   didInsertElement(...args) {
     this._super(...args);
-    if (get(this, "showSlides")) {
-      setTimeout(() => {
+    run.later(() => {
+      if (get(this, "showSlides")) {
         set(this, "_widget", this.$().flickity(this._getOptions()));
-      }, 0);
-    }
+      }
+    }, 0);
   },
 
   willDestroyElement() {
@@ -100,25 +94,21 @@ export default Ember.Component.extend({
     const eventHandlers = {};
     let events = get(this, "events");
     let eventsList = get(this, "eventKeys");
+    let eventsFromParameters = true;
 
     if (events) {
       eventsList = Object.keys(events);
-    } else {
-      events = this.attrs;
+      eventsFromParameters = false;
     }
 
     eventsList.forEach(key => {
-      if (events[key]) {
-        const isDelayed = get(this, "delayedEvents").includes(key);
-        const delayTime = isDelayed ? get(this, "delayTime") : 0;
-
-        eventHandlers[key] = (event, pointer, cellElement, cellIndex) => {
-          setTimeout(() => {
-            const $widget = get(this, "_widget");
-
-            events[key](cellIndex || $widget.data("flickity").selectedIndex,
-              $widget.data("flickity"));
-          }, delayTime);
+      const eventFunc = eventsFromParameters ? get(this, key): events[key];
+      if (eventFunc) {
+        eventHandlers[key] = (...args) => {
+          run.later(() => {
+            const $widget = get(this, "_widget").data("flickity");
+            eventFunc(...args, $widget);
+          },0);
         };
       }
     });
@@ -137,7 +127,7 @@ export default Ember.Component.extend({
     });
 
     const events = this._setupEvents() || {};
-
+    //console.log(events);
     if (Object.keys(events).length > 0) {
       props.on = events;
     }

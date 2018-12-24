@@ -99,8 +99,6 @@ export default Component.extend({
     if (events) {
       eventsList = Object.keys(events);
       eventsFromParameters = false;
-    } else {
-      events = this.attrs; // eslint-disable-line ember/no-attrs-in-components
     }
 
     eventsList.forEach(key => {

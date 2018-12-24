@@ -1,9 +1,0 @@
----
-extends: unstandard
-parserOptions:
-  ecmaVersion: 6
-  sourceType: module
-rules:
-  prefer-arrow-callback:
-    - error
-    - allowNamedFunctions: true

@@ -1,6 +1,6 @@
 {
   "name": "ember-flickity",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "description": "An ember addon for flickity.",
   "keywords": [
     "ember-addon"
@@ -17,6 +17,10 @@
     {
       "name": "Brian Gonzalez",
       "email": "brian@dollarshaveclub.com"
+    },
+    {
+      "name": "Chris Whittle",
+      "email": "cwhittl@gmail.com"
     }
   ],
   "directories": {

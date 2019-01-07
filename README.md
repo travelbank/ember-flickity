@@ -30,8 +30,33 @@ All [options][flickityOptions] and [events][flickityEvents] are supported.
 [flickityEvents]: http://flickity.metafizzy.co/events.html#flickity-events
 [flickityOptions]: http://flickity.metafizzy.co/options.html
 
+```javascript
+    actions:{
+      mySettle(index, flickityElement) => {
+        console.log('settle');
+      },
+    }
+```
 ```handlebars
 {{#em-flickity pageDots=true draggable=true showSlides=(gt numItems 1) settle=(action 'mySettle')}}
+
+{{/em-flickity}}
+```
+```javascript
+  events: computed(() => {
+    return {
+      ready: (index, flickityElement) => {
+        console.log('ready');
+        flickityElement.resize();
+      },
+      change: (index, flickityElement) => {
+        console.log('change');
+      },
+    };
+  }),
+```
+```handlebars
+{{#em-flickity pageDots=true draggable=true events=events}}
 
 {{/em-flickity}}
 ```

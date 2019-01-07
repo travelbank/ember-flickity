@@ -30,6 +30,8 @@
   "scripts": {
     "build": "ember build",
     "lint:js": "eslint .",
+    "prepare-release": "curl -sL https://raw.githubusercontent.com/travelbank/misc/master/scripts/prepare_release.sh | bash -s",
+
     "start": "ember serve",
     "test": "ember test",
     "test:all": "ember try:each"
